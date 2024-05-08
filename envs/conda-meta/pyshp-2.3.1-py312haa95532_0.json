@@ -1,0 +1,115 @@
+{
+  "build": "py312haa95532_0",
+  "build_number": 0,
+  "channel": "https://repo.anaconda.com/pkgs/main/win-64",
+  "constrains": [],
+  "depends": [
+    "python >=3.12,<3.13.0a0"
+  ],
+  "extracted_package_dir": "C:\\Users\\dmtrm\\.conda\\pkgs\\pyshp-2.3.1-py312haa95532_0",
+  "files": [
+    "Lib/site-packages/__pycache__/shapefile.cpython-312.pyc",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/INSTALLER",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/LICENSE.TXT",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/METADATA",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/RECORD",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/REQUESTED",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/WHEEL",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/direct_url.json",
+    "Lib/site-packages/pyshp-2.3.1.dist-info/top_level.txt",
+    "Lib/site-packages/shapefile.py"
+  ],
+  "fn": "pyshp-2.3.1-py312haa95532_0.conda",
+  "legacy_bz2_md5": "b9468c2edb288ab5305214210b5ebce6",
+  "license": "MIT",
+  "license_family": "MIT",
+  "link": {
+    "source": "C:\\Users\\dmtrm\\.conda\\pkgs\\pyshp-2.3.1-py312haa95532_0",
+    "type": 1
+  },
+  "md5": "156c67ed7945f145a07cdec183b30524",
+  "name": "pyshp",
+  "package_tarball_full_path": "C:\\Users\\dmtrm\\.conda\\pkgs\\pyshp-2.3.1-py312haa95532_0.conda",
+  "paths_data": {
+    "paths": [
+      {
+        "_path": "Lib/site-packages/__pycache__/shapefile.cpython-312.pyc",
+        "path_type": "hardlink",
+        "sha256": "7dfa133ae3acaa03c9ace54fa3cbb87d0c20d56d1f0904dca428b554fe1e5a9f",
+        "sha256_in_prefix": "7dfa133ae3acaa03c9ace54fa3cbb87d0c20d56d1f0904dca428b554fe1e5a9f",
+        "size_in_bytes": 112294
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/INSTALLER",
+        "path_type": "hardlink",
+        "sha256": "d0edee15f91b406f3f99726e44eb990be6e34fd0345b52b910c568e0eef6a2a8",
+        "sha256_in_prefix": "d0edee15f91b406f3f99726e44eb990be6e34fd0345b52b910c568e0eef6a2a8",
+        "size_in_bytes": 5
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/LICENSE.TXT",
+        "path_type": "hardlink",
+        "sha256": "6cfcbf778f6ff3a4dc29e864f5729828c3cfc0ad8140f3e9951a68c4e6dbbdfa",
+        "sha256_in_prefix": "6cfcbf778f6ff3a4dc29e864f5729828c3cfc0ad8140f3e9951a68c4e6dbbdfa",
+        "size_in_bytes": 1085
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/METADATA",
+        "path_type": "hardlink",
+        "sha256": "50f9300e42cb06a66888a2a335e071cdf67dff9f474d924c0ca6be013470bd9b",
+        "sha256_in_prefix": "50f9300e42cb06a66888a2a335e071cdf67dff9f474d924c0ca6be013470bd9b",
+        "size_in_bytes": 57469
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/RECORD",
+        "path_type": "hardlink",
+        "sha256": "c99817b301acad3e788dda76cbc9a4ae3282769109ccd94e9937dd103975c720",
+        "sha256_in_prefix": "c99817b301acad3e788dda76cbc9a4ae3282769109ccd94e9937dd103975c720",
+        "size_in_bytes": 765
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/REQUESTED",
+        "path_type": "hardlink",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "sha256_in_prefix": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "size_in_bytes": 0
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/WHEEL",
+        "path_type": "hardlink",
+        "sha256": "89896fe5f5f7e7b3d0c914f6a3ab70d5b37e61c2851472aa07f2f01cee703fe8",
+        "sha256_in_prefix": "89896fe5f5f7e7b3d0c914f6a3ab70d5b37e61c2851472aa07f2f01cee703fe8",
+        "size_in_bytes": 110
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/direct_url.json",
+        "path_type": "hardlink",
+        "sha256": "b75082f69a209ed6d2236a5d9c5cecb45d10f8b1f452e577251a125d74e782e1",
+        "sha256_in_prefix": "b75082f69a209ed6d2236a5d9c5cecb45d10f8b1f452e577251a125d74e782e1",
+        "size_in_bytes": 85
+      },
+      {
+        "_path": "Lib/site-packages/pyshp-2.3.1.dist-info/top_level.txt",
+        "path_type": "hardlink",
+        "sha256": "097c2a9cb7ad421e7c270ac687124becfb1149014a706daec977bf21fd6c3345",
+        "sha256_in_prefix": "097c2a9cb7ad421e7c270ac687124becfb1149014a706daec977bf21fd6c3345",
+        "size_in_bytes": 10
+      },
+      {
+        "_path": "Lib/site-packages/shapefile.py",
+        "path_type": "hardlink",
+        "sha256": "9c749d73e31cc332e4683130a808258b407d2ba8cf33a5e1d5ea190c0eaae73f",
+        "sha256_in_prefix": "9c749d73e31cc332e4683130a808258b407d2ba8cf33a5e1d5ea190c0eaae73f",
+        "size_in_bytes": 114692
+      }
+    ],
+    "paths_version": 1
+  },
+  "requested_spec": "None",
+  "sha256": "7032addc91423339babbfefd21d33181cd8a7027f01009656f4727176712637f",
+  "size": 89464,
+  "subdir": "win-64",
+  "timestamp": 1706101203829,
+  "url": "https://repo.anaconda.com/pkgs/main/win-64/pyshp-2.3.1-py312haa95532_0.conda",
+  "version": "2.3.1"
+}

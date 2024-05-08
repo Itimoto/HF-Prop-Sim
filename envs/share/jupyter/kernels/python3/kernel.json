@@ -1,0 +1,14 @@
+{
+ "argv": [
+  "C:/Users/dmtrm/OneDrive/Desktop/Grad School/Undergrad Research Spring 2024/HF-Prop-Sim/envs\\python.exe",
+  "-m",
+  "ipykernel_launcher",
+  "-f",
+  "{connection_file}"
+ ],
+ "display_name": "Python 3 (ipykernel)",
+ "language": "python",
+ "metadata": {
+  "debugger": false
+ }
+}
