@@ -4,7 +4,7 @@
 ## Setting Up
 The simulator was developed in Spyder, with Python, on a Windows machine.
 
-(1) Setting up the Spyder Environment
+- Setting up the Spyder Environment
     - Install Spyder
         - https://docs.spyder-ide.org/current/installation.html
         - This is a good start. But, we still need more libraries.
