@@ -114,3 +114,9 @@
 +defaults/win-64::scikit-learn-1.4.2-py312hc7c4135_1
 +defaults/win-64::scipy-1.13.0-py312hbb039d4_0
 # update specs: ['scikit-learn']
+==> 2024-05-08 17:03:37 <==
+# cmd: C:\ProgramData\miniconda3\Scripts\conda-script.py install ninja
+# conda version: 24.4.0
++defaults/win-64::ninja-1.10.2-haa95532_5
++defaults/win-64::ninja-base-1.10.2-h6d14046_5
+# update specs: ['ninja']

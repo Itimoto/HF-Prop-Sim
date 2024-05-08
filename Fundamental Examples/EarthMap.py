@@ -2,8 +2,6 @@
 """
 Quick Earth Map Example
 
-Python 3.8.10
-
 https://earth-env-data-science.github.io/lectures/mapping_cartopy.html
 """
 
