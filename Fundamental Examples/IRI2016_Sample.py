@@ -37,6 +37,8 @@ alt_km_range = (100, 500, 10.);
 glat = 65;
 glon = -147.5;
 
+# Info on the timeprofile() method here:
+# https://github.com/space-physics/iri2016/blob/main/src/iri2016/profile.py
 sim = iri.timeprofile(time_start_stop, time_step, alt_km_range, glat, glon);
 print(sim);
 
