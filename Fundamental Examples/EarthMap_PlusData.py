@@ -7,7 +7,7 @@ https://earth-env-data-science.github.io/lectures/mapping_cartopy.html
 
 # Plotting Libraries
 import matplotlib.pyplot as plt
-# Map Libararies
+# Map Libraries
 import cartopy.crs as ccrs
 import cartopy
 
