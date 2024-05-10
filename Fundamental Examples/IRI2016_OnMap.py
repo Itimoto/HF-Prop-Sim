@@ -23,10 +23,6 @@ lats = np.linspace(LATRANGE[0], LATRANGE[1], int((LATRANGE[1]-LATRANGE[0])/STEP)
 lons = np.linspace(-180, 180, int((360)/STEP));
 lat2D, lon2D = np.meshgrid(lats, lons);
 
-# Initialize Plot to Plot with New Data:
-# Plot
-
-
 # Set up Ionosphere Sim
 # Initialize arrays to store ionospheric parameters
 e_density = np.zeros_like(lon2D);
