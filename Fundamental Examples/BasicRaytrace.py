@@ -8,6 +8,7 @@ We choose to ignore strictly reflected waves, considering only the refracted wav
 We're going to start with the following implementation of basic ionosphere raytracing:
     https://github.com/MIST-Experiment/iricore/commit/f6c726582cd7c5877f0cca02bdbfa7fd8377e55a
 """
+import pdb # For debugging
 
 import numpy as np
 import copy
@@ -36,12 +37,12 @@ def globalDirCosines(theta, phi, deg=1):
     # We subtract from 90 degrees to convert Phi to Longitude.
     return np.array([np.sin(theta)*np.cos((np.pi/2)-phi),
                      np.sin(theta)*np.sin((np.pi/2)-phi),
-                     np.cos(theta)]);
+                     np.cos(theta)]);    
 
 ############################# USER INPUTS #####################################
 # RF Wave - Viewed As Free and Globally Tracked
 SIGNAL = {
-            'freq': 10e6,         # 10MHz
+            'freq': 3e6,         # 10MHz
             'mag': 1,             # 1dB, by definition
             'phase': None,        # (Not implemented yet)
             
@@ -51,8 +52,8 @@ SIGNAL = {
             'epsilon_r': 1.0006,  # Relative Permittivity in last recorded medium. Approx at Sea Level.
             };
 
-DIRECTION_THETA = 10; # Degrees off of boresight. 0 points to Sky, 90 points across land.
-DIRECTION_PHI = 45;   # Polar degrees. 0 points along equator, 90 points due North.
+DIRECTION_THETA = 80; # Degrees off of boresight. 0 points to Sky, 90 points across land.
+DIRECTION_PHI = -15;   # Polar degrees. 0 points along equator, 90 points due North.
 TX_DIRECTION = globalDirCosines(DIRECTION_THETA, DIRECTION_PHI);
 
 # RF Transmitter
@@ -62,7 +63,7 @@ TRANSMITTER = {
             'txWave': SIGNAL,
             };
 
-ALTITUDES = np.linspace(80, 1000, 20); # Layers of the Ionosphere allowed to be simulated
+ALTITUDES = np.linspace(80, 1000, 200); # Layers of the Ionosphere allowed to be simulated
 DATETIME = datetime(2020, 6, 1, 0, 0, 0); # An input to the IRI2016 model
 
 ############################### CONSTANTS #####################################
@@ -78,6 +79,35 @@ EPSILON_R_ATM = 1.0006; # (F/m) Relative Permittivity of air
 MU_0 = np.pi*4e-7;      # (N/A^2) Vacuum Permeability
 
 ############################### FUNCTIONS #####################################
+def wrapLatLon(pos, deg=1):
+    max_lat = 90.0; min_lat = -90.0;
+    max_lon = 180.0; min_lon = -180.0;
+    
+    # Lat, Lon, Alt
+    _pos = np.array(pos);
+    if not deg:
+        _pos[0], _pos[1] = np.rad2deg([_pos[0], _pos[1]]);
+    
+    # Wrap latitude within valid range
+    _pos[0] = ((_pos[0] - min_lat) % (max_lat - min_lat)) + min_lat
+    
+    # Wrap longitude within valid range
+    _pos[1] = ((_pos[1] - min_lon) % (max_lon - min_lon)) + min_lon
+
+    return _pos;
+
+def polarToCartesian(pos, deg=1):
+    # Lat, Lon, Alt
+    _pos = np.array(pos);
+    if deg:
+        _pos[0], _pos[1] = np.deg2rad([_pos[0], _pos[1]]);
+        
+    x = pos[2] * np.cos(_pos[0])*np.cos(_pos[1]);
+    y = pos[2] * np.cos(_pos[0])*np.sin(_pos[1]);
+    z = pos[2] * np.sin(_pos[0]);
+    
+    return np.array([x, y, z]);
+
 def closestVals(arr, curr):
     """
     Search array, return closest values to curr
@@ -152,6 +182,8 @@ def collisionPoint(signal, targetAlt):
                            (np.sin(theta1)*np.sin(theta2)*np.cos(phi1-phi2)
                            + np.cos(theta1)*np.cos(theta2)));
         # ^^^ Not 100% sure about this. Investigate in future.
+        # Clamp Latitude and Logitude
+        newPos = wrapLatLon(newPos);
         return (newPos, dist); # Collision occurs at newPos after travelling distTraveled
     else:
         return (signal['pos'], None); # No collision occurs.
@@ -180,6 +212,7 @@ def getRefractionCoeffs(eps_1, eps_2, theta_i, theta_t, deg=0):
     Pull Reflection and Transmission Coefficients for given Relative Permittivities
     Assume Relative Permability is the same.
     https://core.ac.uk/download/pdf/130141591.pdf
+    https://ocw.mit.edu/courses/6-007-electromagnetic-energy-from-motors-to-lasers-spring-2011/6e5c4b74150da32c3b98964855bbdccb_MIT6_007S11_lec29.pdf
     
     Assumes lossless medium
 
@@ -207,6 +240,7 @@ def getRefractionCoeffs(eps_1, eps_2, theta_i, theta_t, deg=0):
     if(deg):
         theta_i, theta_t = np.deg2rad([theta_i, theta_t]);
     
+    """
     # Parallel Component
     R_parallel = (eta_2 * np.cos(theta_i) - eta_1 * np.cos(theta_t)) / \
                  (eta_2 * np.cos(theta_i) + eta_1 * np.cos(theta_t))
@@ -216,8 +250,11 @@ def getRefractionCoeffs(eps_1, eps_2, theta_i, theta_t, deg=0):
     R_perp = (eta_2 * np.cos(theta_t) - eta_1 * np.cos(theta_i)) / \
              (eta_2 * np.cos(theta_i) + eta_1 * np.cos(theta_t))
     T_perp = np.add(1, -1*R_perp)  # 1 - R
+    """
+    R = (eta_2 - eta_1) / (eta_2 + eta_1);
+    T = 2*eta_2 / (eta_2 + eta_1);
 
-    return R_parallel, T_parallel
+    return R, T
     
 def refractSignal(signal, intersectPos, dt):
     """
@@ -260,6 +297,8 @@ def refractSignal(signal, intersectPos, dt):
         epsilon_new = getRelativePermittivity(intersectPos, signal['freq'], dt);
     n2 = np.sqrt(epsilon_new);
         
+    #pdb.set_trace() if epsilon_new < 0 else None
+    """
     # Apply Snell's Law: https://eng.libretexts.org/Bookshelves/Materials_Science/Supplemental_Modules_(Materials_Science)/Optical_Properties/Snell%27s_Law
     # Define Incident Angles along Lat & Long Slices
     incidentLat, incidentLon    = np.deg2rad([signal['dir'][0], signal['dir'][1]]);
@@ -298,6 +337,70 @@ def refractSignal(signal, intersectPos, dt):
                             transCoeff[1]*signal['dir'][1], \
                             2*(transCoeff[0] + transCoeff[1])*signal['dir'][2]]);
     signalRefract['mag'] = np.linalg.norm(refractSignalMag);
+    """
+    
+    # Prepare Output Vars
+    signal['pos'] = np.append(signal['pos'], intersectPos.reshape(-1,1), axis=1);
+    signalReflect = copy.deepcopy(signal);
+    signalRefract = copy.deepcopy(signal);
+    
+    # Apply Snell's Law: https://eng.libretexts.org/Bookshelves/Materials_Science/Supplemental_Modules_(Materials_Science)/Optical_Properties/Snell%27s_Law        
+    # Reasoning behind using incident permittivity as Great Divider for Total Reflection:
+    # https://www.waves.utoronto.ca/prof/svhum/ece422/notes/20c-ionosphere.pdf on pg3    
+    if epsilon_new > 0: # Propagation constant is real, refract.
+        # Define Incident Angles along Lat & Long Slices
+        incidentLat, incidentLon    = np.deg2rad([signal['dir'][0], signal['dir'][1]]);
+        # Apply Snell's Law to compute refracted angles
+        refractLat = np.arcsin((n1 / n2) * np.sin(incidentLat));
+        refractLon = np.arcsin((n1 / n2) * np.sin(incidentLon));
+        refractAlt = np.sin(refractLat) + np.sin(refractLon);
+    
+        # Pull Reflection and Transmission Coefficients
+        refleCoeff, transCoeff = getRefractionCoeffs(epsilon_pre, epsilon_new,   \
+                                                     [incidentLat, incidentLon], \
+                                                     [refractLat, refractLon]);
+        """    
+        refractSigMag = signal['mag']*np.linalg.norm(np.add(
+                (transCoeff[0]**2)*polarToCartesian([refractLat, 0, 1]), \
+                (transCoeff[1]**2)*polarToCartesian([0, refractLon, 1])
+                ));
+        reflectSigMag = signal['mag']*np.linalg.norm(np.add(
+                (refleCoeff[0]**2)*polarToCartesian([incidentLat, 0, 1]), \
+                (refleCoeff[1]**2)*polarToCartesian([0, incidentLon, 1])
+                ));   
+        """
+        reflectSigMag = (transCoeff - 1)**2 * signal['mag'];
+        refractSigMag = (1 - (transCoeff-1)**2) * signal['mag'];
+            
+        # Package Refracted Signal
+        refractLat, refractLon      = np.rad2deg([refractLat, refractLon]);
+        refractDir = np.array([refractLat, refractLon, refractAlt]);
+        refractDir = refractDir / np.linalg.norm(refractDir); # Normalize vector
+        
+        signalRefract['dir'] = refractDir;
+        signalRefract['mag'] = refractSigMag;
+        signalRefract['epsilon_r'] = epsilon_new;
+    else: # Relative Permittivity is negative, complex propagation -- totally reflected
+        print("RefractSignal: Negative Permittivity");
+        # Reflect completely
+        reflectSigMag = signal['mag'];
+        
+        # Refracted Wave Does Not Exist    
+        signalRefract['dir'] = [None, None, None];    
+        signalRefract['mag'] = 0;
+        signalRefract['epsilon_r'] = None;
+    
+    # Package Reflected Signal
+    # Reflect along normal. Magnitude should be preserved.
+    reflectDir = np.array([signal['dir'][0], signal['dir'][1], -1*signal['dir'][2]]); 
+
+    # Update Position, Direction, and Magnitude
+    signalReflect['dir'] = reflectDir;
+    signalReflect['mag'] = reflectSigMag;
+    signalReflect['epsilon_r'] = epsilon_pre;    
+    
+    print("\n POSITION: ", signalRefract['pos'][:, -1], "\nReflected Power ", signalReflect['mag'], " vs. Transmitted Power ", signalRefract['mag'],
+          "\nRX DIR ", signalReflect['dir'], " vs. TX DIR ", signalRefract['dir']);
     
     return signalReflect, signalRefract;
     
@@ -373,10 +476,8 @@ def raytrace(TXprop, signal, altitudes, dt):
             # Propagating through the ionosphere
             signalReflect, signalRefract = refractSignal(signal, newPos, dt);
             # Choose signal with the greatest magnitude
-            strongestSignal = max([signalReflect, signalRefract], key=lambda x: x['mag']);
-            #strongestSignal = signalRefract;
-            signal = strongestSignal;       
-
+            signal = max([signalReflect, signalRefract], key=lambda x: x['mag']);
+      
     
     return signal; #With a frequency, magnitude, and phase
 
@@ -396,5 +497,5 @@ ax.add_feature(cartopy.feature.BORDERS);
 lats = signalPath['pos'][0];
 lons = signalPath['pos'][1];
 
-ax.plot(lons, lats, label='Equirectangular Straight Line');
+ax.scatter(lons, lats, label='Equirectangular Straight Line');
 ax.set_global();
